@@ -2,6 +2,7 @@ import os
 
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
+from os import environ
 
 app = Flask(__name__)
 
@@ -9,7 +10,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
    print('Request for index page received')
-   return render_template('index.html')
+   return render_template('index.html', numberdb = environ.get('Number_DB'))
 
 @app.route('/favicon.ico')
 def favicon():
