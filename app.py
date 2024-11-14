@@ -10,7 +10,12 @@ app = Flask(__name__)
 @app.route('/')
 def index():
    print('Request for index page received')
-   return render_template('index.html', numberdb = environ.get('Number_DB'))
+
+   env_string = ''
+   for name, value in os.environ.items():
+       env_string += "{0}: {1}".format(name, value) + "\n"
+
+   return render_template('index.html', numberdb = env_string)
 
 @app.route('/favicon.ico')
 def favicon():
