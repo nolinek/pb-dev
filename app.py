@@ -1,4 +1,10 @@
 import os
+from sqlalchemy import create_engine
+from sqlalchemy.sql import text
+import sqlalchemy
+import pymysql
+import pandas as pd
+
 
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
@@ -16,6 +22,23 @@ def index():
        env_string += "{0}: {1}".format(name, value) + "\n"
 
    return render_template('index.html', numberdb = env_string)
+
+@app.route('/db')
+
+def db_test():
+    print('Request for db page received')
+
+    conn_str = os.environ.get('MYSQLCONNSTR_NumberDB')
+
+    engine = sqlalchemy.create_engine(conn_str, pool_recycle=3600)
+    #conn = engine.connect()
+
+    df = pd.read_sql('SELECT * FROM NumberManagement.five9Account;', conn_str)
+
+    table = df.to_html(index=False)
+
+    return render_template('table.html', table=table)
+
 
 @app.route('/favicon.ico')
 def favicon():
